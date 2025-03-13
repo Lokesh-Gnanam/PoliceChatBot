@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify # type: ignore
 import random
 
 app = Flask(__name__)
@@ -9,6 +9,7 @@ intents = {
         {"tag": "lost_phone", "patterns": ["I lost my phone", "My phone is missing", "I can't find my phone"], "responses": ["Can you provide the last known location?", "Did you check your recent activities?"]},
         {"tag": "cybercrime", "patterns": ["I was scammed", "My account was hacked", "I got a phishing email"], "responses": ["Please report it immediately to the cybercrime division. Do you need contact details?"]},
     ]
+    
 }
 
 def get_response(user_input):
