@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Assistance Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .chatbox {
+            width: 300px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 15%;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chatbox">
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+        <input type="text" id="user_input" placeholder="Ask something..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    async function sendMessage() {
+        let user_input = document.getElementById('user_input').value;
+        if (user_input.trim() === "") return;
+        
+        // Display user's message
+        let messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML += `<div><b>You:</b> ${user_input}</div>`;
+
+        // Call the Flask API to get response
+        let response = await fetch('http://127.0.0.1:5000/get_response', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_input: user_input }),
+        });
+
+        let data = await response.json();
+        let bot_response = data.response;
+
+        // Display bot's response
+        messagesDiv.innerHTML += `<div><b>Bot:</b> ${bot_response}</div>`;
+        
+        // Clear input field
+        document.getElementById('user_input').value = '';
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
